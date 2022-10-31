@@ -1,5 +1,6 @@
 import logging
 import time
+import shutil
 import datetime
 import os
 import glob
@@ -50,8 +51,9 @@ def set_logging():
 
 
 def cleanup_old_log():
-    for f in glob.glob("./logs/*.log"):
-        os.remove(f)
+    if os.path.exists("logs"):
+        shutil.rmtree("logs")
+    os.makedirs("logs")
 
 
 # Clean old logs everytime we start this automation
