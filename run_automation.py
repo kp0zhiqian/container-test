@@ -44,8 +44,10 @@ class TestBed(object):
             ipam_config = docker.types.IPAMConfig(
                 driver="default", pool_configs=[ipam_pool]
             )
-            # Here I will not use enable_ipv6=True to enable IPv6 network as it required adding below special configuration
-            # Use 2001:db8::/32 is the TEST NET IPv6 block for doc use based on RFC 3849 https://tools.ietf.org/html/rfc3849
+            # Here I will not use enable_ipv6=True to enable IPv6 network
+            # because it requires adding below special configuration
+            # Below configuration use 2001:db8::/32 is the TEST NET IPv6 block
+            # based on RFC 3849 https://tools.ietf.org/html/rfc3849
             # {
             #   "ipv6": true,
             #   "fixed-cidr-v6": "2001:db8:1::/64"
@@ -55,7 +57,7 @@ class TestBed(object):
             # sysctl net.ipv6.conf.default.forwarding=1
             # sysctl net.ipv6.conf.all.forwarding=1
             #
-            # These extra config will cause extra efforts to run this automation on another system.
+            # These extra config will cause extra efforts to run this automation.
             # Of course, the IPv6 testing should be added in a real test scenario
             self.test_network = self.engine.networks.create(
                 name="test_network",
@@ -135,7 +137,7 @@ class TestBed(object):
             logger.info("Done!")
         except docker.errors.APIError as E:
             logger.error(
-                "test network removed! Please manually solve the problem and remove it! \nERROR: {E}"
+                "test network failed to remove! \nERROR: {E}"
             )
             sys.exit(1)
 
@@ -271,12 +273,14 @@ class TestSuite(object):
         """
         Test Case: SSH Availability
         Test Owner: zhiqian0923@gmail.com
-        Test Purpose: Verify the DUT has SSH up&running and we can establish a SSH connection from Testing machine.
+        Test Purpose: Verify the DUT has SSH up&running and we can establish a SSH
+                      connection from Testing machine.
         Prerequisite:
             1. DUT and Testing machine are connected with proper IP configuration
             2. DUT has configured SSH server
             3. DUT has a user 'testuser' with passwod 'test' and a home directory
-            4. DUT has a file called 'verify' with content 'i_am_dut' inside. 'verify' file should under 'testuser' home directory
+            4. DUT has a file called 'verify' with content 'i_am_dut' inside. 
+               'verify' file should under 'testuser' home directory
         Test Steps:
             1. SSH from Testing machine with user:testuser and password:test to the DUT
             2. Read the 'verify' file from testuser home directory, check the content
